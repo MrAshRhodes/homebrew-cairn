@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><!-- sparkle-sign-warning:
+IMPORTANT: This file was signed by Sparkle. Any modifications to this file requires re-signing this file with generate_appcast or sign_update! The signed signature will be embedded at the end of this file.
+--><rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+  <channel>
+    <title>Cairn updates</title>
+    <link>https://github.com/mrashrhodes/cairn</link>
+    <description>Authenticated Cairn releases</description>
+    <item>
+      <title>Cairn 0.1.0</title>
+      <pubDate>Wed, 21 Oct 2026 16:10:28 GMT</pubDate>
+      <sparkle:version>0.1.0</sparkle:version>
+      <sparkle:shortVersionString>0.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <enclosure url="https://github.com/mrashrhodes/cairn/releases/download/v0.1.0/Cairn-0.1.0-universal.zip" length="4150533" type="application/octet-stream" sparkle:edSignature="rv+E/yXXk69YS0QU7bRvR8kXOHi5/BHFA+nUsdKvGNxg1xbU/DwsXcUiBCLV1iQJYrKYvw+C4yX2um63EFoUBA=="></enclosure>
+    </item>
+  </channel>
+</rss><!-- sparkle-signatures:
+edSignature: /btyj1N24kFsor7MV0PkSMMbRkd0WWmcHPK8PuqF3Yk8fuLljQDPYOGtgqQ914+jxZq3Ojx1cTUZPNyWlNGnAg==
+length: 1140
+-->

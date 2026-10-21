@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 4 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_ANALYTICS: "1"
+  HOMEBREW_NO_ENV_HINTS: "1"
+
+jobs:
+  scripts:
+    name: Scripts and workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Unit tests
+        env:
+          TAP_TESTS_REQUIRE_OPENSSL: "1"
+        run: python3 -m unittest -v
+      - name: ShellCheck
+        run: shellcheck scripts/*.sh
+      - name: actionlint
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
+          "$(go env GOPATH)/bin/actionlint"
+
+  # The checked-out tap: style, audit, then install, inspect, upgrade and zap on each Mac architecture.
+  cask:
+    name: Cask (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    steps:
+      - uses: Homebrew/actions/setup-homebrew@4790763c0a3ba4036f72634dc079c4a7dfcd4878 # 2026.10.19.1
+      - name: Validate the cask
+        run: bash scripts/ci-validate.sh tap
+
+  # The public tap on GitHub, as a user meets it: no setup, a fresh runner.
+  published:
+    name: Published tap (macos-15)
+    if: github.event_name != 'pull_request'
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install, upgrade and uninstall from the public tap
+        run: bash scripts/ci-validate.sh published
